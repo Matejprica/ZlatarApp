@@ -1811,6 +1811,7 @@ namespace ZlatarApp
                 txtBoxMassNormML.Clear();
                 txtBoxSurfaceNormalization.Clear();
                 txtBoxMassNormalization.Clear();
+                txtBoxPhNormalization.Clear();
 
                 txtBoxMassNormalization.Enabled = false;
                 txtBoxSurfaceNormalization.Enabled = false;

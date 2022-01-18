@@ -184,7 +184,7 @@ namespace ZlatarApp
                     var date = DateTime.Now;
                     writer.WriteLine("Date: " + date.ToShortDateString() +
                         "\tTime: " + date.ToShortTimeString());
-                    writer.WriteLine($"t/s{DELIMITER}Ewe/V{DELIMITER}I/mA");
+                    writer.WriteLine($"t/s{DELIMITER}Ewe/V{DELIMITER}I/A");
 
                     for (int i = 0; i < TimeInSec.Count; i++)
                     {
