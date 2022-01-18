@@ -233,6 +233,8 @@
             this.tabContainer.SelectedIndex = 0;
             this.tabContainer.Size = new System.Drawing.Size(1011, 507);
             this.tabContainer.TabIndex = 26;
+            this.tabContainer.DragDrop += new System.Windows.Forms.DragEventHandler(this.lvSfcNormalization_DragDrop);
+            this.tabContainer.DragEnter += new System.Windows.Forms.DragEventHandler(this.lvSfcNormalization_DragEnter);
             // 
             // tpCalibration
             // 
@@ -792,7 +794,6 @@
             this.lvSfcNormalization.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lvSfcNormalization.HideSelection = false;
             this.lvSfcNormalization.Location = new System.Drawing.Point(18, 210);
-            this.lvSfcNormalization.MultiSelect = false;
             this.lvSfcNormalization.Name = "lvSfcNormalization";
             this.lvSfcNormalization.Size = new System.Drawing.Size(185, 260);
             this.lvSfcNormalization.Sorting = System.Windows.Forms.SortOrder.Ascending;
