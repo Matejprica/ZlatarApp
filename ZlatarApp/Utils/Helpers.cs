@@ -330,7 +330,8 @@ namespace ZlatarApp.Utils
             do
             {
                 string[] str = reader.ReadLine().Split(';');
-                if (str[0].ToLower().Contains("time/s") && str[1].ToLower().Contains("ewe/v") || str[0].ToLower().Contains("t/s") && str[1].ToLower().Contains("ewe/v"))
+                if (str[0].ToLower().Contains("time/s") && str[1].ToLower().Contains("ewe/v") || 
+                    str[0].ToLower().Contains("t/s") && str[1].ToLower().Contains("ewe/v"))
                     break;
             } while (!reader.EndOfStream);
         }

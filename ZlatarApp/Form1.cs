@@ -1752,13 +1752,31 @@ namespace ZlatarApp
         private void btnClearSfcNorm_Click(object sender, EventArgs e)
         {
             List<string> normMLs = txtBoxMassNormML.Text.Split('\n').ToList();
-            List<string> normMassValues = txtBoxMassNormalization.Text.Split('\n').ToList();
-            List<string> normSurfaceValues = txtBoxSurfaceNormalization.Text.Split('\n').ToList();
-
+            Dictionary<int, string> normMassValues = new Dictionary<int, string>();
+            List<string> massVal = txtBoxMassNormalization.Text.Split('\n').ToList();
+            
             //Removing last value which is empty str
             normMLs.RemoveAt(normMLs.Count - 1);
-            normMassValues.RemoveAt(normMassValues.Count - 1);
-            normSurfaceValues.RemoveAt(normSurfaceValues.Count - 1);
+            
+            for (int i = 0; i < normMLs.Count; i++)
+            {
+                if(massVal.ElementAtOrDefault(i) == null || massVal.ElementAtOrDefault(i) =="\r")
+                    normMassValues[i] = " ";
+                else
+                    normMassValues[i] = massVal[i];
+
+            }
+
+            Dictionary<int, string> normSurfaceValues = new Dictionary<int, string>();
+            List<string> surfaceVal = txtBoxSurfaceNormalization.Text.Split('\n').ToList();
+            for (int i = 0; i < normMLs.Count; i++)
+            {
+                if (surfaceVal.ElementAtOrDefault(i) == null || surfaceVal.ElementAtOrDefault(i) == "\r")
+                    normSurfaceValues[i] = " ";
+                else
+                    normSurfaceValues[i] = surfaceVal[i];
+            }
+
 
             if (lvSfcNormalization.SelectedItems.Count != 0)
             {
@@ -1768,15 +1786,8 @@ namespace ZlatarApp
                     lvSfcNormalization.Items.Remove(item);
                     normMLs.RemoveAt(index);
 
-                    if (normMassValues.ElementAtOrDefault(index) != null && normMassValues.Count <= normMLs.Count)
-                        normMassValues.RemoveAt(index);
-                    else
-                        normMassValues.Clear();
-
-                    if (normSurfaceValues.ElementAtOrDefault(index) != null && normSurfaceValues.Count <= normMLs.Count)
-                        normSurfaceValues.RemoveAt(index);
-                    else
-                        normSurfaceValues.Clear();
+                    normMassValues[index]=" ";
+                    normSurfaceValues[index]=" ";
                 }
             }
             else
@@ -1790,7 +1801,7 @@ namespace ZlatarApp
             RenderNewMLs(normMLs, normMassValues, normSurfaceValues);         
         }
 
-        private void RenderNewMLs(List<string> normMLs, List<string> normMassValues, List<string> normSurfaceValues)
+        private void RenderNewMLs(List<string> normMLs, Dictionary<int, string> normMassValues, Dictionary<int, string> normSurfaceValues)
         {
             if (normMLs.Count == 0)
             {
@@ -1798,6 +1809,9 @@ namespace ZlatarApp
                 txtBoxConstantMassNorm.Clear();
                 txtBoxSurfaceNormML.Clear();
                 txtBoxMassNormML.Clear();
+                txtBoxSurfaceNormalization.Clear();
+                txtBoxMassNormalization.Clear();
+                txtBoxPhNormalization.Clear();
 
                 txtBoxMassNormalization.Enabled = false;
                 txtBoxSurfaceNormalization.Enabled = false;
@@ -1823,10 +1837,12 @@ namespace ZlatarApp
                 {
                     sbML.Append(normMLs[i] + "\n");
 
+                    
                     if(normMassValues.Count != 0)
                         sbMassVal.Append(normMassValues[i] + "\n");
                     if(normSurfaceValues.Count != 0)
                         sbSurfaceVal.Append(normSurfaceValues[i] + "\n");
+                    
                 }
 
                 txtBoxMassNormML.Text = sbML.ToString();
