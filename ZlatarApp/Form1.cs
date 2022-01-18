@@ -1751,25 +1751,89 @@ namespace ZlatarApp
 
         private void btnClearSfcNorm_Click(object sender, EventArgs e)
         {
-            lvSfcNormalization.Items.Clear();
-            txtBoxMassNormML.Clear();
-            txtBoxMassNormalization.Clear();
-            txtBoxSurfaceNormML.Clear();
-            txtBoxSurfaceNormalization.Clear();
-            txtBoxConstantSurfaceNorm.Clear();
-            txtBoxConstantMassNorm.Clear();
+            List<string> normMLs = txtBoxMassNormML.Text.Split('\n').ToList();
+            List<string> normMassValues = txtBoxMassNormalization.Text.Split('\n').ToList();
+            List<string> normSurfaceValues = txtBoxSurfaceNormalization.Text.Split('\n').ToList();
 
-            txtBoxMassNormalization.Enabled = false;
-            txtBoxSurfaceNormalization.Enabled = false;
-            cbConstantMass.Visible = false;
-            cbConstantSurface.Visible = false;
-            lblPhNorm.Visible = false;
-            txtBoxPhNormalization.Visible = false;
-            btnNormalization.Visible = false;
-            txtBoxConstantSurfaceNorm.Visible = false;
-            lblConstSurfaceNorm.Visible = false;
-            txtBoxConstantMassNorm.Visible = false;
-            lblConstMassNorm.Visible = false;
+            //Removing last value which is empty str
+            normMLs.RemoveAt(normMLs.Count - 1);
+            normMassValues.RemoveAt(normMassValues.Count - 1);
+            normSurfaceValues.RemoveAt(normSurfaceValues.Count - 1);
+
+            if (lvSfcNormalization.SelectedItems.Count != 0)
+            {
+                foreach (ListViewItem item in lvSfcNormalization.SelectedItems)
+                {
+                    int index = item.Index;
+                    lvSfcNormalization.Items.Remove(item);
+                    normMLs.RemoveAt(index);
+
+                    if (normMassValues.ElementAtOrDefault(index) != null && normMassValues.Count <= normMLs.Count)
+                        normMassValues.RemoveAt(index);
+                    else
+                        normMassValues.Clear();
+
+                    if (normSurfaceValues.ElementAtOrDefault(index) != null && normSurfaceValues.Count <= normMLs.Count)
+                        normSurfaceValues.RemoveAt(index);
+                    else
+                        normSurfaceValues.Clear();
+                }
+            }
+            else
+            {
+                lvSfcNormalization.Items.Clear();
+                normMLs.Clear();
+                normMassValues.Clear();
+                normSurfaceValues.Clear();
+            }
+
+            RenderNewMLs(normMLs, normMassValues, normSurfaceValues);         
+        }
+
+        private void RenderNewMLs(List<string> normMLs, List<string> normMassValues, List<string> normSurfaceValues)
+        {
+            if (normMLs.Count == 0)
+            {
+                txtBoxConstantSurfaceNorm.Clear();
+                txtBoxConstantMassNorm.Clear();
+                txtBoxSurfaceNormML.Clear();
+                txtBoxMassNormML.Clear();
+
+                txtBoxMassNormalization.Enabled = false;
+                txtBoxSurfaceNormalization.Enabled = false;
+                cbConstantMass.Visible = false;
+                cbConstantMass.Checked = false;
+                cbConstantSurface.Visible = false;
+                cbConstantSurface.Checked = false;
+                lblPhNorm.Visible = false;
+                txtBoxPhNormalization.Visible = false;
+                btnNormalization.Visible = false;
+                txtBoxConstantSurfaceNorm.Visible = false;
+                lblConstSurfaceNorm.Visible = false;
+                txtBoxConstantMassNorm.Visible = false;
+                lblConstMassNorm.Visible = false;
+            }
+            else
+            {
+                StringBuilder sbML = new StringBuilder();
+                StringBuilder sbMassVal = new StringBuilder();
+                StringBuilder sbSurfaceVal = new StringBuilder();
+
+                for (int i = 0; i < normMLs.Count; i++)
+                {
+                    sbML.Append(normMLs[i] + "\n");
+
+                    if(normMassValues.Count != 0)
+                        sbMassVal.Append(normMassValues[i] + "\n");
+                    if(normSurfaceValues.Count != 0)
+                        sbSurfaceVal.Append(normSurfaceValues[i] + "\n");
+                }
+
+                txtBoxMassNormML.Text = sbML.ToString();
+                txtBoxSurfaceNormML.Text = sbML.ToString();
+                txtBoxMassNormalization.Text = sbMassVal.ToString();
+                txtBoxSurfaceNormalization.Text = sbSurfaceVal.ToString();
+            }
         }
 
         private void btnClearMassNorm_Click(object sender, EventArgs e)
