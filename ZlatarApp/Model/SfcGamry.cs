@@ -136,11 +136,16 @@ namespace ZlatarApp.Model
                     writer.Write("Date: " + date.ToShortDateString() + "\tTime: " + date.ToShortTimeString() + "\t");
 
                     if (normalizationEnum == NormalizationEnum.Geometric)
+                    {
                         writer.WriteLine("Surface: " + value + "cm^2");
+                        writer.WriteLine($"t/s{DELIMITER}Vf{DELIMITER}mA cm^2");
+                    }
                     else if (normalizationEnum == NormalizationEnum.Mass)
+                    {
                         writer.WriteLine("Mass: " + value + "g");
+                        writer.WriteLine($"t/s{DELIMITER}Vf{DELIMITER}A g^-1");
+                    }
 
-                    writer.WriteLine($"t/s{DELIMITER}Vf{DELIMITER}Im");
 
                     for (int i = 0; i < TimeInSec.Count; i++)
                     {

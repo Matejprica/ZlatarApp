@@ -317,7 +317,10 @@ namespace ZlatarApp.Utils
             do
             {
                 string[] str = reader.ReadLine().Split('\t');
-                if ((str[0].ToLower().Contains("t/s") && str[2].ToLower().Contains("im/a")) || (str[0].ToLower().Contains("t/s") && str[2].ToLower().Contains("i/a")) || (str[0].ToLower().Contains("time") && str[2].ToLower().Contains("im")))
+                if ((str[0].ToLower().Contains("t/s") && str[2].ToLower().Contains("im/a")) || 
+                    (str[0].ToLower().Contains("t/s") && str[2].ToLower().Contains("i/a")) || 
+                    (str[0].ToLower().Contains("time") && str[2].ToLower().Contains("im")) ||
+                    (str[0].ToLower().Contains("t/s") && str[2].ToLower().Contains("j")))
                     break;
             } while (!reader.EndOfStream);
         }
