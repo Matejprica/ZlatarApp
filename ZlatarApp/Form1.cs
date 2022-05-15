@@ -131,11 +131,6 @@ namespace ZlatarApp
         private async void btnCalibrationInfo_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start(Calibration.CalibrationPath);
-
-            /*
-            FormCalibrationInfo formCalibrationInfo = new FormCalibrationInfo();
-            formCalibrationInfo.Show();
-            */
         }
 
         private async void btnDeleteCalibration_Click(object sender, EventArgs e)
@@ -393,12 +388,116 @@ namespace ZlatarApp
 
                 flpIcpMs.Controls.Clear();
                 ListViewItemCollection items = form.GetListViewItems();
+
+                StringBuilder sbBulkAnalysis = new StringBuilder();
+
                 foreach (ListViewItem item in items)
                 {
-                    await IcpMsMacroListTreatment(item);                   
+                    await IcpMsMacroListTreatment(item);
+
+                    if (cbBulkAnalysis.Checked)
+                    {
+                        IcpMsBulkAnalysis(item, sbBulkAnalysis);
+                    }
+                }
+
+                if (cbBulkAnalysis.Checked)
+                {
+                    SaveBulkAnalysis(sbBulkAnalysis);
                 }
             }
             FillCbIcpMS();
+        }
+
+        private void IcpMsBulkAnalysis(ListViewItem item, StringBuilder sb)
+        {
+            string ml = item.Text.Split('-').Last().Split('.').First();
+
+            List<Dictionary<string, List<double>>> elementValuesList = new List<Dictionary<string, List<double>>>();
+            List<double> means = new List<double>();
+            List<double> standardDeviations = new List<double>();
+
+            using (StreamReader reader = new StreamReader(item.Tag.ToString()))
+            {
+                string firstLine = reader.ReadLine(); //drop 1st line
+                string[] secondLine = reader.ReadLine().Split(',');
+
+                for (int i = 1; i < secondLine.Length; i++)
+                {
+                    string element = secondLine[i];
+                    Dictionary<string, List<double>> dict = new Dictionary<string, List<double>>();
+                    dict.Add(element, new List<double>());
+
+                    elementValuesList.Add(dict);
+                }
+
+                while (!reader.EndOfStream)
+                {
+                    string[] line = reader.ReadLine().Split(',');
+
+                    for (int i = 1; i < line.Length; i++)
+                    {
+                        elementValuesList[i-1][Calibration.ElementsAndIs[i-1].Name].Add(Helpers.ParseStrToDouble(line[i]));
+                    }
+                }
+            }
+
+            //calculate means
+            foreach (var eleVal in elementValuesList)
+            {
+                double mean = 0;
+                foreach (var val in eleVal.Values.First())
+                {
+                    mean += val;
+                }
+
+                mean /= eleVal.Values.First().Count;
+                means.Add(mean);
+            }
+
+            //calculate st. dev
+            for (int i = 0; i < elementValuesList.Count; i++)
+            {
+                double sd = 0;
+                foreach (var val in elementValuesList[i].Values.First())
+                {
+                    sd += Math.Pow(val - means[i], 2);
+                }
+
+                sd /= elementValuesList[i].Values.First().Count;
+                standardDeviations.Add(sd);
+            }
+
+            //Append to SB
+            for (int i = 0; i < elementValuesList.Count; i++)
+            {
+                sb.AppendLine(ml + ',' +
+                    elementValuesList[i].Keys.First() + '-' + means[i] + ',' +
+                    elementValuesList[i].Keys.First() + '-' + standardDeviations[i]);
+            }
+        }
+
+        private void SaveBulkAnalysis(StringBuilder sb)
+        {
+            string dirPath = Path.Combine(Helpers.AppFolderPath, Calibration.CalibrationDate, Helpers.ICP_MS_DIR, "BulkAnalysis");
+            Directory.CreateDirectory(dirPath);
+            var date = DateTime.Now;
+
+            string path = Path.Combine(dirPath, "BulkAnalysis-" + date.ToShortDateString() + "-" + date.Hour + "." + date.Minute + ".txt");
+
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(path))
+                {
+                    writer.WriteLine("Date: " + date.ToShortDateString() + "\tTime: " + date.ToShortTimeString() + "\t");
+                    writer.WriteLine("MacroList,Mean,Standard Deviation");
+                    writer.Write(sb.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         private void FillCbIcpMS()

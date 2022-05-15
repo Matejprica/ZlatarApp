@@ -140,6 +140,7 @@
             this.flpLoadJ = new System.Windows.Forms.FlowLayoutPanel();
             this.splitterJ = new System.Windows.Forms.Splitter();
             this.flpIcpMsSfcJ = new System.Windows.Forms.FlowLayoutPanel();
+            this.cbBulkAnalysis = new System.Windows.Forms.CheckBox();
             this.menuStrip.SuspendLayout();
             this.cmsFlpChart.SuspendLayout();
             this.tabContainer.SuspendLayout();
@@ -321,6 +322,7 @@
             // 
             // tpIcpMs
             // 
+            this.tpIcpMs.Controls.Add(this.cbBulkAnalysis);
             this.tpIcpMs.Controls.Add(this.label3);
             this.tpIcpMs.Controls.Add(this.cbICpMsElements);
             this.tpIcpMs.Controls.Add(this.lblMeasureDatePane2);
@@ -334,7 +336,6 @@
             this.tpIcpMs.Size = new System.Drawing.Size(1003, 476);
             this.tpIcpMs.TabIndex = 1;
             this.tpIcpMs.Text = "ICP-MS";
-            this.tpIcpMs.MouseClick += new System.Windows.Forms.MouseEventHandler(this.flpIcpMs_MouseClick);
             // 
             // label3
             // 
@@ -1401,6 +1402,16 @@
             this.flpIcpMsSfcJ.Size = new System.Drawing.Size(863, 195);
             this.flpIcpMsSfcJ.TabIndex = 0;
             // 
+            // cbBulkAnalysis
+            // 
+            this.cbBulkAnalysis.AutoSize = true;
+            this.cbBulkAnalysis.Location = new System.Drawing.Point(15, 367);
+            this.cbBulkAnalysis.Name = "cbBulkAnalysis";
+            this.cbBulkAnalysis.Size = new System.Drawing.Size(114, 22);
+            this.cbBulkAnalysis.TabIndex = 26;
+            this.cbBulkAnalysis.Text = "Bulk Analysis";
+            this.cbBulkAnalysis.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1552,6 +1563,7 @@
         private System.Windows.Forms.CheckBox cbConstantSurface;
         private System.Windows.Forms.Label lblPhNorm;
         private System.Windows.Forms.TextBox txtBoxPhNormalization;
+        private System.Windows.Forms.CheckBox cbBulkAnalysis;
     }
 }
 
