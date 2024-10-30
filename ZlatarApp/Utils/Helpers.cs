@@ -8,6 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Point = System.Windows.Point;
 
@@ -42,17 +43,21 @@ namespace ZlatarApp.Utils
         }
 
         internal static double ParseStrToDouble(string strNumber)
-        {          
-            if (strNumber.Contains("."))
-                strNumber = strNumber.Replace('.', ',');
-
-            if (strNumber == "")
+        {
+            // Early exit for empty or null strings
+            if (string.IsNullOrWhiteSpace(strNumber))
                 return 0;
 
-            if (Double.TryParse(strNumber, out double res))
+            // Clean up the input string: trim, remove '+', and remove spaces within the number
+            strNumber = strNumber.Trim().Replace("+", "").Replace(" ", "");
+
+            // Attempt to parse with support for decimal and scientific notation
+            if (Double.TryParse(strNumber, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out double res))
+            {
                 return res;
-            else
-                throw new Exception("Invalid input! Expecting number");
+            }
+
+            throw new Exception($"Invalid input! Expecting number but received '{strNumber}'");
         }
 
         internal static bool IcpMsCorrectFileNameFormat(string fileName)
