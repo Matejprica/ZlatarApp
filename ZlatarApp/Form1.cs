@@ -1241,15 +1241,15 @@ namespace ZlatarApp
         {
             labelFlowrateMin.Visible = true;
             lblFlowrateMin.Visible = true;
-            lblFlowrateMin.Text = flowrate.ToString();
+            lblFlowrateMin.Text = flowrate.ToString(CultureInfo.InvariantCulture);
 
             labelFlowrateSec.Visible = true;
             lblFlowrateSec.Visible = true;
-            lblFlowrateSec.Text = (flowrate / 60).ToString();
+            lblFlowrateSec.Text = (flowrate / 60).ToString(CultureInfo.InvariantCulture);
 
             labelShift.Visible = true;
             lblShift.Visible = true;
-            lblShift.Text = shift.ToString();
+            lblShift.Text = shift.ToString(CultureInfo.InvariantCulture);
         }
 
         private void Pnl_MouseDoubleClick(object sender, MouseEventArgs e)
